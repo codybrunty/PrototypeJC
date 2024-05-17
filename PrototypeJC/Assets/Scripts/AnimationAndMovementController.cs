@@ -94,6 +94,7 @@ public class AnimationAndMovementController : MonoBehaviour{
             currentMovement.y = groundedGravity;
             appliedMovement.y = groundedGravity;
         }
+
         else if (isFalling) {
             float prevVelo = currentMovement.y;
             currentMovement.y = currentMovement.y + (gravity * fallMultiplier * Time.deltaTime);
