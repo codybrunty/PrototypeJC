@@ -44,7 +44,9 @@ public class PlayerGroundedState : PlayerBaseState, IRootState {
     }
 
     public void HandleGravity() {
-        Ctx.CurrentMovementY = Ctx.Gravity;
-        Ctx.AppliedMovementY = Ctx.Gravity;
+        //Ctx.CurrentMovementY = Ctx.Gravity;
+        //Ctx.AppliedMovementY = Ctx.Gravity;
+        Ctx.CurrentMovementY = -9.8f;
+        Ctx.AppliedMovementY = -9.8f;
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class PlayerStateMachine : MonoBehaviour{
 
@@ -17,6 +18,7 @@ public class PlayerStateMachine : MonoBehaviour{
     Vector2 currentMovementInput;
     Vector3 currentMovement;
     Vector3 appliedMovement;
+    Vector3 cameraRelativeMovement;
 
     bool isMovementPressed = false;
     bool isRunPressed = false;
@@ -29,13 +31,13 @@ public class PlayerStateMachine : MonoBehaviour{
     private float gravity = -9.8f;
 
     [Header("Jumping")]
-    private bool isJumping = false;
-    private float initialJumpVelocity;
     public float maxJumpHeight = 1f;
     public float maxJumpTime = 0.5f;
     public float jumpingFallMultiplier = 2f;
     private bool requireNewJumpPress = false;
-
+    private bool isJumping = false;
+    private float initialJumpVelocity;
+    private List<float> storedVariables = new List<float>();
 
 
     PlayerBaseState currentState;
@@ -86,36 +88,73 @@ public class PlayerStateMachine : MonoBehaviour{
         playerInput.CharacterControls.Run.canceled += OnRun;
         playerInput.CharacterControls.Jump.started += OnJump;
         playerInput.CharacterControls.Jump.canceled += OnJump;
+        StoreJumpVariables();
         SetupJumpVariables();
     }
     private void Start() {
         characterController.Move(appliedMovement*Time.deltaTime);
     }
     private void Update() {
+        if (DidJumpVariablesChange()) {
+            StoreJumpVariables();
+            SetupJumpVariables();
+        }
         HandleRotation();
         HandleMovement();
         currentState.UpdateStates();
     }
 
     private void HandleMovement() {
-        characterController.Move(appliedMovement * Time.deltaTime);
+        cameraRelativeMovement = ConvertToCameraSpace(appliedMovement);
+        characterController.Move(cameraRelativeMovement * Time.deltaTime);
     }
+
+    private Vector3 ConvertToCameraSpace(Vector3 vec) {
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
+        float y = vec.y;
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+        cameraForward = cameraForward.normalized;
+        cameraRight = cameraRight.normalized;
+
+        Vector3 cameraForwardZProduct = vec.z * cameraForward;
+        Vector3 cameraRightXProduct = vec.x * cameraRight;
+        Vector3 vecInCameraSpace = cameraForwardZProduct + cameraRightXProduct;
+        vecInCameraSpace.y = y;
+        return vecInCameraSpace;
+    }
+
     private void HandleRotation() {
         Vector3 positionToLookAt;
-        positionToLookAt.x = currentMovement.x;
+        positionToLookAt.x = cameraRelativeMovement.x;
         positionToLookAt.y = 0;
-        positionToLookAt.z = currentMovement.z;
+        positionToLookAt.z = cameraRelativeMovement.z;
         Quaternion currentRotation = transform.rotation;
-        if (isMovementPressed) {
+        if (isMovementPressed && positionToLookAt!=Vector3.zero) {
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
     }
     private void SetupJumpVariables() {
-        float timeToApex = maxJumpTime / 2;
-        gravity = (-2 * maxJumpHeight) / Mathf.Pow(timeToApex, 2);
-        initialJumpVelocity = (2 * maxJumpHeight) / timeToApex;
+        float timeToApex = maxJumpTime / 2f;
+        gravity = (-2f * maxJumpHeight) / Mathf.Pow(timeToApex, 2f);
+        initialJumpVelocity = (2f * maxJumpHeight) / timeToApex;
+    }
+
+    private bool DidJumpVariablesChange() {
+        bool results = false;
+        if(maxJumpHeight != storedVariables[0]|| maxJumpTime!= storedVariables[1] || jumpingFallMultiplier!= storedVariables[2]) {
+            results = true;
+        }
+        return results;
+    }
+    private void StoreJumpVariables() {
+        storedVariables.Clear();
+        storedVariables.Add(maxJumpHeight);
+        storedVariables.Add(maxJumpTime);
+        storedVariables.Add(jumpingFallMultiplier);
     }
 
     private void OnMovementInput(InputAction.CallbackContext context) {

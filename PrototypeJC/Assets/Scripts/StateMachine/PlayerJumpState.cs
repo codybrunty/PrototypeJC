@@ -43,7 +43,7 @@ public class PlayerJumpState : PlayerBaseState, IRootState {
         if (isFalling) {
             float prevVelo = Ctx.CurrentMovementY;
             Ctx.CurrentMovementY = Ctx.CurrentMovementY + (Ctx.Gravity * Ctx.FallMultiplier * Time.deltaTime);
-            Ctx.AppliedMovementY = Mathf.Max((prevVelo + Ctx.CurrentMovementY) * .5f, -20f);
+            Ctx.AppliedMovementY = Mathf.Max((prevVelo + Ctx.CurrentMovementY) * .5f, -30f);
 
         }
         else {

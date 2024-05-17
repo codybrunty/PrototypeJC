@@ -26,7 +26,7 @@ public class PlayerFallState : PlayerBaseState, IRootState {
     public void HandleGravity() {
         float prevVelo = Ctx.CurrentMovementY;
         Ctx.CurrentMovementY = Ctx.CurrentMovementY + (Ctx.Gravity * Ctx.FallMultiplier * Time.deltaTime);
-        Ctx.AppliedMovementY = Mathf.Max((prevVelo + Ctx.CurrentMovementY) * .5f, -20f);
+        Ctx.AppliedMovementY = Mathf.Max((prevVelo + Ctx.CurrentMovementY) * .5f, -30f);
     }
 
     public override void UpdateState() {
