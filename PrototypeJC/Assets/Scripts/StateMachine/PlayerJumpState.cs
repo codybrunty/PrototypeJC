@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerJumpState : PlayerBaseState {
+public class PlayerJumpState : PlayerBaseState, IRootState {
 
     public PlayerJumpState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) 
         : base(currentContext, playerStateFactory) {
         IsRootState = true;
-        InitializeSubState();
     }
 
     public override void EnterState() {
+        InitializeSubState();
         HandleJump();
     }
     public override void UpdateState() {
@@ -24,7 +24,6 @@ public class PlayerJumpState : PlayerBaseState {
         }
     }
 
-    public override void InitializeSubState() {}
 
     public override void CheckSwitchStates() {
         if (Ctx.CharacterController.isGrounded) {
@@ -39,7 +38,7 @@ public class PlayerJumpState : PlayerBaseState {
         Ctx.CurrentMovementY = Ctx.InitialJumpVelocity;
         Ctx.AppliedMovementY = Ctx.InitialJumpVelocity;
     }
-    private void HandleGravity() {
+    public void HandleGravity() {
         bool isFalling = Ctx.CurrentMovementY <= 0f || !Ctx.IsJumpedPressed;
         if (isFalling) {
             float prevVelo = Ctx.CurrentMovementY;
@@ -54,4 +53,17 @@ public class PlayerJumpState : PlayerBaseState {
 
         }
     }
+
+    public override void InitializeSubState() {
+        if (!Ctx.IsMovementPressed && !Ctx.IsRunPressed) {
+            SetSubState(Factory.Idle());
+        }
+        else if (Ctx.IsMovementPressed && !Ctx.IsRunPressed) {
+            SetSubState(Factory.Walk());
+        }
+        else {
+            SetSubState(Factory.Run());
+        }
+    }
+
 }

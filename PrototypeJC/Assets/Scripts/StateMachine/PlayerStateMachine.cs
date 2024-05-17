@@ -12,6 +12,7 @@ public class PlayerStateMachine : MonoBehaviour{
     int isWalkingHash;
     int isRunningHash;
     int isJumpingHash;
+    int isFallingHash;
 
     Vector2 currentMovementInput;
     Vector3 currentMovement;
@@ -21,18 +22,21 @@ public class PlayerStateMachine : MonoBehaviour{
     bool isRunPressed = false;
     bool isJumpedPressed = false;
 
+    [Header("Movement")]
     public float moveSpeed = 1f;
     public float runSpeed = 1f;
     public float rotationSpeed = 1f;
     private float gravity = -9.8f;
-    private float groundedGravity = -0.5f;
 
+    [Header("Jumping")]
     private bool isJumping = false;
     private float initialJumpVelocity;
     public float maxJumpHeight = 1f;
     public float maxJumpTime = 0.5f;
-    public float fallMultiplier = 2f;
+    public float jumpingFallMultiplier = 2f;
     private bool requireNewJumpPress = false;
+
+
 
     PlayerBaseState currentState;
     PlayerStateFactory states;
@@ -41,6 +45,7 @@ public class PlayerStateMachine : MonoBehaviour{
     public Animator Animator { get { return animator; } }
     public int IsJumpingHash { get { return isJumpingHash; } }
     public int IsWalkingHash { get { return isWalkingHash; } }
+    public int IsFallingHash { get { return isFallingHash; } }
     public int IsRunningHash { get { return isRunningHash; } }
     public bool IsJumpedPressed { get { return isJumpedPressed; } }
     public bool IsJumping { set { isJumping=value; } }
@@ -52,12 +57,11 @@ public class PlayerStateMachine : MonoBehaviour{
 
     public float InitialJumpVelocity { get { return initialJumpVelocity; } }
     public CharacterController CharacterController { get { return characterController; } }
-    public float GroundedGravity { get { return groundedGravity; } }
     public float Gravity { get { return gravity; } }
     public float RunSpeed { get { return runSpeed; } }
     public float MoveSpeed { get { return moveSpeed; } }
 
-    public float FallMultiplier { get { return fallMultiplier; } }
+    public float FallMultiplier { get { return jumpingFallMultiplier; } }
     public bool IsMovementPressed { get { return isMovementPressed; } }
     public bool IsRunPressed { get { return isRunPressed; } }
     public Vector2 CurrentMovementInput { get { return currentMovementInput; } }
@@ -73,6 +77,7 @@ public class PlayerStateMachine : MonoBehaviour{
         isWalkingHash = Animator.StringToHash("IsWalking");
         isRunningHash = Animator.StringToHash("IsRunning");
         isJumpingHash = Animator.StringToHash("IsJumping");
+        isFallingHash = Animator.StringToHash("IsFalling");
         playerInput = new PlayerInput();
         playerInput.CharacterControls.Move.started += OnMovementInput;
         playerInput.CharacterControls.Move.canceled += OnMovementInput;
@@ -82,6 +87,9 @@ public class PlayerStateMachine : MonoBehaviour{
         playerInput.CharacterControls.Jump.started += OnJump;
         playerInput.CharacterControls.Jump.canceled += OnJump;
         SetupJumpVariables();
+    }
+    private void Start() {
+        characterController.Move(appliedMovement*Time.deltaTime);
     }
     private void Update() {
         HandleRotation();
