@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerIdleState : PlayerBaseState {
 
-    public PlayerIdleState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory) { }
+    public PlayerIdleState(MovingEntityStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(currentContext, playerStateFactory) { }
     public override void CheckSwitchStates() {
         if(Ctx.IsMovementPressed && Ctx.IsRunPressed) {
             SwitchState(Factory.Run());

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerGroundedState : PlayerBaseState, IRootState {
-    public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) 
+    public PlayerGroundedState(MovingEntityStateMachine currentContext, PlayerStateFactory playerStateFactory) 
         : base(currentContext, playerStateFactory) {
         IsRootState = true;
     }
