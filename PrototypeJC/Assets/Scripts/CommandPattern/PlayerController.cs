@@ -53,13 +53,17 @@ public class PlayerController : MonoBehaviour, ICharacter {
         return commandController.CanJump();
     }
 
-    public void Teleport(Vector3 pos) {
+    public void Teleport(Vector3 pos, Quaternion rot) {
         characterController.enabled = false;
         transform.position = pos;
+        transform.rotation = rot;
         characterController.enabled = true;
     }
     public Vector3 GetPosition() {
         return transform.position;
+    }
+    public Quaternion GetRotation() {
+        return transform.rotation;
     }
 
 }

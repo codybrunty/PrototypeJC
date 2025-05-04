@@ -20,9 +20,6 @@ public class MovingEntityCommandController {
     private bool isJumpPressed = false;
 
     private bool isActuallyGrounded = false;
-    private float groundedTimer = 0f;
-    private readonly float groundedGraceTime = 0.2f;
-
     private float jumpHoldTime = 0f;
     private readonly float maxJumpHoldTime = 0.25f;
 
@@ -62,14 +59,9 @@ public class MovingEntityCommandController {
     }
 
     private void UpdateGroundedState() {
-        if (characterController.isGrounded) {
-            groundedTimer = groundedGraceTime;
-        }
-        else {
-            groundedTimer -= Time.deltaTime;
-        }
-
-        isActuallyGrounded = groundedTimer > 0f;
+        Vector3 origin = transform.position + new Vector3(0f, -0.15f, 0f);
+        float radius = .3f;
+        isActuallyGrounded = Physics.CheckSphere(origin, radius);
     }
 
     public void SetMoveInput(Vector2 input) {
@@ -86,7 +78,6 @@ public class MovingEntityCommandController {
 
         if (isPressed && isActuallyGrounded) {
             currentVelocity.y = initialJumpVelocity;
-            groundedTimer = 0f;
             jumpHoldTime = 0f;
         }
     }
@@ -142,4 +133,6 @@ public class MovingEntityCommandController {
         animator.SetBool(isJumpingHash, isJumping && currentVelocity.y > 0.1f);
         animator.SetBool(isFallingHash, isJumping && currentVelocity.y < 0f);
     }
+
+
 }

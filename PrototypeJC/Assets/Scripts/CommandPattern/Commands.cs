@@ -3,6 +3,7 @@ public class MoveCommand : ICommand {
     private readonly ICharacter character;
     private readonly Vector2 input;
     private Vector3 previousPos;
+    private Quaternion previousRotation;
 
     public MoveCommand(ICharacter character, Vector2 input) {
         this.character = character;
@@ -11,11 +12,12 @@ public class MoveCommand : ICommand {
 
     public void Execute() {
         previousPos = character.GetPosition();
+        previousRotation = character.GetRotation();
         character.Move(input);
     }
 
     public void Undo() {
-        character.Teleport(previousPos);
+        character.Teleport(previousPos,previousRotation);
     }
 }
 public class RunCommand : ICommand {
