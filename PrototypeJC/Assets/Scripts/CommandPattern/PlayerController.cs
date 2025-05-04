@@ -52,4 +52,14 @@ public class PlayerController : MonoBehaviour, ICharacter {
     public bool CanJump() {
         return commandController.CanJump();
     }
+
+    public void Teleport(Vector3 pos) {
+        characterController.enabled = false;
+        transform.position = pos;
+        characterController.enabled = true;
+    }
+    public Vector3 GetPosition() {
+        return transform.position;
+    }
+
 }

@@ -10,7 +10,14 @@ public class InputHandler : MonoBehaviour {
         character = GetComponent<ICharacter>(); 
         playerInput = new PlayerInput();
     }
-
+    private void Update() {
+        if (UnityEngine.InputSystem.Keyboard.current.uKey.wasReleasedThisFrame) {
+            UndoAll();
+        }
+        if (UnityEngine.InputSystem.Keyboard.current.zKey.wasReleasedThisFrame) {
+            UndoLastCommand();
+        }
+    }
     private void OnEnable() {
         playerInput.CharacterControls.Enable();
         playerInput.CharacterControls.Move.performed += OnMovePerformed;
@@ -53,5 +60,10 @@ public class InputHandler : MonoBehaviour {
     private void OnJumpCanceled(UnityEngine.InputSystem.InputAction.CallbackContext ctx) {
         executor.ExecuteCommand(new JumpCommand(character, false));
     }
-
+    public void UndoAll() {
+        executor.UndoAllCommands();
+    }
+    public void UndoLastCommand() {
+        executor.UndoLastCommand();
+    }
 }

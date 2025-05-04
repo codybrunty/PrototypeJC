@@ -2,6 +2,7 @@ using UnityEngine;
 public class MoveCommand : ICommand {
     private readonly ICharacter character;
     private readonly Vector2 input;
+    private Vector3 previousPos;
 
     public MoveCommand(ICharacter character, Vector2 input) {
         this.character = character;
@@ -9,7 +10,12 @@ public class MoveCommand : ICommand {
     }
 
     public void Execute() {
+        previousPos = character.GetPosition();
         character.Move(input);
+    }
+
+    public void Undo() {
+        character.Teleport(previousPos);
     }
 }
 public class RunCommand : ICommand {
@@ -24,6 +30,10 @@ public class RunCommand : ICommand {
     public void Execute() {
         character.SetRun(isRunning);
     }
+
+    public void Undo() {
+
+    }
 }
 
 public class JumpCommand : ICommand {
@@ -37,5 +47,9 @@ public class JumpCommand : ICommand {
 
     public void Execute() {
         character.Jump(isJumping);
+    }
+
+    public void Undo() {
+
     }
 }
