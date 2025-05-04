@@ -5119,7 +5119,8 @@ GameObject:
   - component: {fileID: 4193865778379377640}
   - component: {fileID: 196662355335508771}
   - component: {fileID: 6932789575559452550}
-  - component: {fileID: 7410407927901132461}
+  - component: {fileID: 5916644270831398221}
+  - component: {fileID: 991327720662431176}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -5215,7 +5216,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.88, z: 0}
---- !u!114 &7410407927901132461
+--- !u!114 &5916644270831398221
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5224,7 +5225,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8357631890977170558}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 468754222e85c7b4f9ec24c0ef396149, type: 3}
+  m_Script: {fileID: 11500000, guid: 3562eeaf1a232d2408a7374cbb3a1e35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
@@ -5232,7 +5233,19 @@ MonoBehaviour:
   rotationSpeed: 20
   maxJumpHeight: 3.5
   maxJumpTime: 0.65
-  jumpingFallMultiplier: 2
+  jumpFallMultiplier: 2
+--- !u!114 &991327720662431176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8357631890977170558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adfa2e429b9489246ad82c82c7cfe8a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8501712864078818434
 GameObject:
   m_ObjectHideFlags: 0
