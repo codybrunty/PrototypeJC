@@ -4,33 +4,26 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
-public class PlayerStateMachine : MonoBehaviour{
+public class MovingEntityStateMachine{
 
     PlayerInput playerInput;
     CharacterController characterController;
     Animator animator;
-
     int isWalkingHash;
     int isRunningHash;
     int isJumpingHash;
     int isFallingHash;
-
     Vector2 currentMovementInput;
     Vector3 currentMovement;
     Vector3 appliedMovement;
     Vector3 cameraRelativeMovement;
-
     bool isMovementPressed = false;
     bool isRunPressed = false;
     bool isJumpedPressed = false;
-
-    [Header("Movement")]
     public float moveSpeed = 1f;
     public float runSpeed = 1f;
     public float rotationSpeed = 1f;
     private float gravity = -9.8f;
-
-    [Header("Jumping")]
     public float maxJumpHeight = 1f;
     public float maxJumpTime = 0.5f;
     public float jumpingFallMultiplier = 2f;
@@ -38,10 +31,9 @@ public class PlayerStateMachine : MonoBehaviour{
     private bool isJumping = false;
     private float initialJumpVelocity;
     private List<float> storedVariables = new List<float>();
-
-
     PlayerBaseState currentState;
     PlayerStateFactory states;
+    private Transform transform;
 
     public PlayerBaseState CurrentState { get { return currentState; } set { currentState = value; } }
     public Animator Animator { get { return animator; } }
@@ -68,10 +60,19 @@ public class PlayerStateMachine : MonoBehaviour{
     public bool IsRunPressed { get { return isRunPressed; } }
     public Vector2 CurrentMovementInput { get { return currentMovementInput; } }
 
-    private void Awake() {
-        characterController = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
-        
+
+    public MovingEntityStateMachine(CharacterController controller, Animator animator, Transform transform, float moveSpeed, float runSpeed, float rotationSpeed, float maxJumpHeight, float maxJumpTime, float jumpFallMultiplier) {
+        this.characterController = controller;
+        this.animator = animator;
+        this.transform = transform;
+
+        this.moveSpeed = moveSpeed;
+        this.runSpeed = runSpeed;
+        this.rotationSpeed = rotationSpeed;
+        this.maxJumpHeight = maxJumpHeight;
+        this.maxJumpTime = maxJumpTime;
+        this.jumpingFallMultiplier = jumpFallMultiplier;
+
         states = new PlayerStateFactory(this);
         currentState = states.Grounded();
         currentState.EnterState();
@@ -88,13 +89,21 @@ public class PlayerStateMachine : MonoBehaviour{
         playerInput.CharacterControls.Run.canceled += OnRun;
         playerInput.CharacterControls.Jump.started += OnJump;
         playerInput.CharacterControls.Jump.canceled += OnJump;
+        playerInput.Enable();
         StoreJumpVariables();
         SetupJumpVariables();
     }
-    private void Start() {
-        characterController.Move(appliedMovement*Time.deltaTime);
+    public void Dispose() {
+        playerInput.CharacterControls.Move.started -= OnMovementInput;
+        playerInput.CharacterControls.Move.canceled -= OnMovementInput;
+        playerInput.CharacterControls.Move.performed -= OnMovementInput;
+        playerInput.CharacterControls.Run.started -= OnRun;
+        playerInput.CharacterControls.Run.canceled -= OnRun;
+        playerInput.CharacterControls.Jump.started -= OnJump;
+        playerInput.CharacterControls.Jump.canceled -= OnJump;
+        playerInput.Disable();
     }
-    private void Update() {
+    public void Tick() {
         if (DidJumpVariablesChange()) {
             StoreJumpVariables();
             SetupJumpVariables();
@@ -135,7 +144,6 @@ public class PlayerStateMachine : MonoBehaviour{
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
-
     }
     private void SetupJumpVariables() {
         float timeToApex = maxJumpTime / 2f;
@@ -172,11 +180,11 @@ public class PlayerStateMachine : MonoBehaviour{
     private void OnRun(InputAction.CallbackContext context) {
         isRunPressed = context.ReadValueAsButton();
     }
-    private void OnEnable() {
+    public void EnableInput() {
         playerInput.CharacterControls.Enable();
     }
 
-    private void OnDisable() {
+    public void DisableInput() {
         playerInput.CharacterControls.Disable();
     }
 }

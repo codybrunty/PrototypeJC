@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 public class PlayerStateFactory {
 
-    PlayerStateMachine context;
+    MovingEntityStateMachine context;
     Dictionary<PlayerStates, PlayerBaseState> states = new Dictionary<PlayerStates, PlayerBaseState>();
-    public PlayerStateFactory(PlayerStateMachine currentContext) {
+    public PlayerStateFactory(MovingEntityStateMachine currentContext) {
         context = currentContext;
         states[PlayerStates.idle] = new PlayerIdleState(context, this);
         states[PlayerStates.walk] = new PlayerWalkState(context, this);

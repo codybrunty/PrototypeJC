@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerJumpState : PlayerBaseState, IRootState {
 
-    public PlayerJumpState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) 
+    public PlayerJumpState(MovingEntityStateMachine currentContext, PlayerStateFactory playerStateFactory) 
         : base(currentContext, playerStateFactory) {
         IsRootState = true;
     }
