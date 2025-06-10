@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewLevelConfig", menuName = "Test/Level Configuration Data")]
-public class LevelConfiguration : ScriptableObject {
-    public EnvironmentData env;
-    public PathData path;
+public class LevelConfigurationSO : ScriptableObject {
+    public EnvironmentSO env;
+    public PathSO path;
 }

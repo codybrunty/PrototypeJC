@@ -5,7 +5,7 @@ public class SavePathTool {
     [MenuItem("Test/Save Path Data From Selected")]
     public static void SavePath() {
         var selected = Selection.transforms;
-        var asset = ScriptableObject.CreateInstance<PathData>();
+        var asset = ScriptableObject.CreateInstance<PathSO>();
         asset.pathPoints = new Vector3[selected.Length];
 
         for (int i = 0; i < selected.Length; i++) {

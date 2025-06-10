@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnvironmentFactory : IFactory<EnvironmentData, GameObject> {
-    public GameObject Create(EnvironmentData envData) {
-        return Object.Instantiate(envData.environmentPrefab);
+public class EnvironmentFactory : IFactory<LevelConfigurationSO, GameObject> {
+    public GameObject Create(LevelConfigurationSO levelConfig) {
+        return Object.Instantiate(levelConfig.env.environmentPrefab);
     }
 }

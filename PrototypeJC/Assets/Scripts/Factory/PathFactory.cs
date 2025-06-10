@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathFactory : IFactory<PathData, List<Transform>> {
-    public List<Transform> Create(PathData pathData) {
+public class PathFactory : IFactory<LevelConfigurationSO, List<Transform>> {
+    public List<Transform> Create(LevelConfigurationSO levelConfig) {
         var result = new List<Transform>();
 
-        for (int i = 0; i < pathData.pathPoints.Length; i++) {
+        for (int i = 0; i < levelConfig.path.pathPoints.Length; i++) {
             var point = new GameObject($"PathPoint_{i}").transform;
-            point.position = pathData.pathPoints[i];
+            point.position = levelConfig.path.pathPoints[i];
 
             //temp add sphere on path point
             var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);

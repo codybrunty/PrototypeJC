@@ -1,21 +1,20 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelLoader : MonoBehaviour {
-    [SerializeField] private LevelConfiguration levelConfig;
+    [SerializeField] private LevelConfigurationSO levelConfig;
     private SpawnService spawnService;
 
     private void Awake() {
-        RegisterSpawnService();
-        LoadLevel();
-    }
-
-    private void RegisterSpawnService() {
-        ServiceLocator.RegisterService(new SpawnService(new EnvironmentFactory(), new PathFactory()));
         spawnService = ServiceLocator.GetService<SpawnService>();
+        LoadLevel();
     }
 
     private void LoadLevel() {
         spawnService.SpawnLevel(levelConfig);
-    }
 
+        //Do Something With This Later...
+        GameObject environment = GameManager.instance.EnvironmentSpawner.Environment;
+        List<Transform> path = GameManager.instance.PathSpawner.Path;
+    }
 }

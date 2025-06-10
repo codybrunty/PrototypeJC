@@ -2,21 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnService {
-    private readonly EnvironmentFactory environmentFactory;
-    private readonly PathFactory pathFactory;
+    private readonly List<ILevelConfigurationSpawner> spawners;
 
-    public SpawnService(EnvironmentFactory environmentFactory, PathFactory pathFactory) {
-        this.environmentFactory = environmentFactory;
-        this.pathFactory = pathFactory;
+    public SpawnService(List<ILevelConfigurationSpawner> spawners) {
+        this.spawners = spawners;
     }
 
-    public void SpawnLevel(LevelConfiguration config) {
-        //environment
-        GameObject env = environmentFactory.Create(config.env);
-
-        //path
-        List<Transform> path = pathFactory.Create(config.path);
-        //send to whoever needs path
+    public void SpawnLevel(LevelConfigurationSO config) {
+        foreach (var spawner in spawners) {
+            spawner.Spawn(config);
+        }
     }
-
 }

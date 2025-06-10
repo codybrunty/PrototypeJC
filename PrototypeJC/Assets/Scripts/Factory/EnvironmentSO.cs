@@ -1,6 +1,6 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewEnvironment", menuName = "Test/Environment Data")]
-public class EnvironmentData : ScriptableObject {
+public class EnvironmentSO : ScriptableObject {
     public GameObject environmentPrefab; 
 }
