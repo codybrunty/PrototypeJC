@@ -11,6 +11,7 @@ public class EnvironmentSpawner : ILevelConfigurationSpawner {
     }
 
     public void Spawn(LevelConfigurationSO config) {
+        if (config.env == null) return;
         Environment = factory.Create(config);
     }
 }

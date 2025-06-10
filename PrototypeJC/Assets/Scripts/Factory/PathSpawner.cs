@@ -11,6 +11,7 @@ public class PathSpawner : ILevelConfigurationSpawner {
     }
 
     public void Spawn(LevelConfigurationSO config) {
+        if (config.path == null || config.path.pathPoints.Length == 0) return;
         Path = factory.Create(config);
     }
 }
