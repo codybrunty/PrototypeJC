@@ -4,4 +4,5 @@ using UnityEngine;
 public class LevelConfigurationSO : ScriptableObject {
     public EnvironmentSO env;
     public PathSO path;
+    public EnemyConfigurationSO[] enemyConfigs;
 }

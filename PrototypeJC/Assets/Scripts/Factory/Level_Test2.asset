@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fc2b903dfdb6ec444800083819357781, type: 3}
-  m_Name: Level_Test
+  m_Name: Level_Test2
   m_EditorClassIdentifier: 
-  env: {fileID: 11400000, guid: 82ba23b7d7279be438a7e3d34542e728, type: 2}
-  path: {fileID: 11400000, guid: e65f42772c9832943b68328737af491e, type: 2}
+  env: {fileID: 11400000, guid: fec1e2d9cc9b30a4b96878d3d301ad3c, type: 2}
+  path: {fileID: 11400000, guid: 59b465e0003659c4ca2af818f8471564, type: 2}
   enemyConfigs:
   - {fileID: 11400000, guid: 7d98671d65ee1c84eb65a23df82060aa, type: 2}
   - {fileID: 11400000, guid: 04fb91c34c5189c4f9c91e9890e511a6, type: 2}

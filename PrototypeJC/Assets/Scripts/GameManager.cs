@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
 
             RegisterSpawnService();
+            RegisterEnemyService();
             //RegisterSaveLoadService();
             //RegisterStatsService();
             //RegisterPlayerPositionService();
@@ -24,11 +25,13 @@ public class GameManager : MonoBehaviour {
     private void RegisterSpawnService() {
         EnvironmentSpawner = new EnvironmentSpawner(new EnvironmentFactory());
         PathSpawner = new PathSpawner(new PathFactory());
-
         var spawners = new List<ILevelConfigurationSpawner> {
                 EnvironmentSpawner,
-                PathSpawner
-             };
+                PathSpawner,
+        };
         ServiceLocator.RegisterService(new SpawnService(spawners));
+    }
+    private void RegisterEnemyService() {
+        ServiceLocator.RegisterService(new EnemyService());
     }
 }
