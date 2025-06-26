@@ -9,9 +9,9 @@ public static class ServiceLocator {
         services[typeof(T)] = service;
     }
 
-    public static T GetService<T>() {
+    public static IService GetService<T>() {
         if (services.TryGetValue(typeof(T), out var service)) {
-            return (T)service;
+            return (IService)service;
         }
         throw new System.Exception($"Service of type {typeof(T)} not found!");
     }

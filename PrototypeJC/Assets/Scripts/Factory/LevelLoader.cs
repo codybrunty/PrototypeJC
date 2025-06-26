@@ -6,11 +6,10 @@ using UnityEngine;
 public class LevelLoader : MonoBehaviour {
     [SerializeField] private List<LevelConfigurationSO> levelConfigs;
     private int levelConfigIndex=0;
-    private SpawnService spawnService;
-    private EnemyService enemyService;
+    private IService spawnService;
+    private IService enemyService;
     private GameObject currentEnvironment;
     private List<Transform> currentPath = new();
-    private Coroutine enemySpawnCoroutine;
     private void Awake() {
         spawnService = ServiceLocator.GetService<SpawnService>();
         LoadLevel();
@@ -24,7 +23,7 @@ public class LevelLoader : MonoBehaviour {
     }
     public void LoadLevel() {
         ClearLevel();
-        spawnService.SpawnLevel(levelConfigs[levelConfigIndex]);
+        ((SpawnService)spawnService).SpawnLevel(levelConfigs[levelConfigIndex]);
 
         if (levelConfigs[levelConfigIndex].env != null) {
             currentEnvironment = GameManager.instance.EnvironmentSpawner.Environment;
@@ -36,26 +35,14 @@ public class LevelLoader : MonoBehaviour {
 
         enemyService = ServiceLocator.GetService<EnemyService>();
         if (levelConfigs[levelConfigIndex].path != null) {
-            enemyService.Initialize(GameManager.instance.PathSpawner.Path, levelConfigs[levelConfigIndex].enemyConfigs);
-            StartEnemySpawning();
+            enemyService.Initialize(new EnemyServiceParamWrapper(GameManager.instance.PathSpawner.Path, levelConfigs[levelConfigIndex].enemyConfigs));
         }
 
     }
-    public void StartEnemySpawning() {
-        if (enemySpawnCoroutine != null) { StopCoroutine(enemySpawnCoroutine); }
-        enemySpawnCoroutine = StartCoroutine(TrySpawnEnemy());
-    }
-    private IEnumerator TrySpawnEnemy() {
-        while (enemyService.HasEnemiesInQueue()) {
-            yield return new WaitForSeconds(Random.Range(.25f, 1.5f));
-            EventBus.Publish(new EnemyTrySpawnEvent());
-        }
 
-        EventBus.Publish(new GameOverEvent());
-    }
 
     private void ClearLevel() {
-        enemyService?.Cleanup();
+        ((EnemyService)enemyService)?.Cleanup();
         if (currentEnvironment != null) {
             DestroyImmediate(currentEnvironment);
             currentEnvironment = null;

@@ -1,18 +1,40 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyService {
+public class EnemyService: IService {
     private List<Transform> entrancePath;
     private List<Enemy> enemySlots; // Size == entrancePath.Count
     private Queue<EnemyConfigurationSO> enemyQueue = new();
+    private Coroutine enemySpawnCoroutine;
+
     public bool HasEnemiesInQueue() { return enemyQueue.Count > 0; }
 
-    public void Initialize(List<Transform> path, EnemyConfigurationSO[] enemyConfigs) {
-        entrancePath = path;
-        enemySlots = new List<Enemy>(new Enemy[path.Count]);
-        SpawnEnemies(enemyConfigs);
+    public void Initialize(ServiceInitParamWrapper initParams) {
+        EnemyServiceParamWrapper pars = (EnemyServiceParamWrapper)initParams;
+        entrancePath = pars.Path;
+        enemySlots = new List<Enemy>(new Enemy[pars.Path.Count]);
+        SpawnEnemies(pars.EnemyConfigs);
         EventBus.Subscribe<EnemyTrySpawnEvent>(TrySpawnFromQueue);
+        StartEnemySpawning();
     }
+    public void Execute() {
+        throw new System.NotImplementedException();
+    }
+    public void StartEnemySpawning() {
+        if (enemySpawnCoroutine != null) { CoroutineRunner.Instance().StopCoroutine(enemySpawnCoroutine); }
+        enemySpawnCoroutine = CoroutineRunner.Instance().StartCoroutine(TrySpawnEnemy());
+    }
+
+    private IEnumerator TrySpawnEnemy() {
+        while (HasEnemiesInQueue()) {
+            yield return new WaitForSeconds(Random.Range(.25f, 1.5f));
+            EventBus.Publish(new EnemyTrySpawnEvent());
+        }
+
+        EventBus.Publish(new GameOverEvent());
+    }
+
 
     public void SpawnEnemies(EnemyConfigurationSO[] enemyConfigs) {
         foreach (var enemy in enemyConfigs) {
@@ -70,4 +92,6 @@ public class EnemyService {
         entrancePath = null;
         enemySlots = null;
     }
+
+
 }
