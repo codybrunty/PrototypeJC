@@ -8,8 +8,10 @@ public class CoroutineRunner : MonoBehaviour{
     public static CoroutineRunner instance;
 
     public static CoroutineRunner Instance() {
-        if (instance == null) { 
-            instance = new CoroutineRunner(); 
+        if (instance == null) {
+            var go = new GameObject("CoroutineRunner");
+            DontDestroyOnLoad(go);
+            instance = go.AddComponent<CoroutineRunner>();
         }
         return instance;
     }
