@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc2b903dfdb6ec444800083819357781, type: 3}
+  m_Name: Level_Test
+  m_EditorClassIdentifier: 
+  env: {fileID: 11400000, guid: 82ba23b7d7279be438a7e3d34542e728, type: 2}
+  path: {fileID: 11400000, guid: e65f42772c9832943b68328737af491e, type: 2}
+  enemyConfigs:
+  - {fileID: 11400000, guid: 7d98671d65ee1c84eb65a23df82060aa, type: 2}
+  - {fileID: 11400000, guid: 04fb91c34c5189c4f9c91e9890e511a6, type: 2}
+  - {fileID: 11400000, guid: c05bc67e4dfb80f4684b7d13baabeeff, type: 2}
+  - {fileID: 11400000, guid: 79cd2fbf967866c469d480dd309f7d96, type: 2}
+  - {fileID: 11400000, guid: fccdf3489c327864a8e294e3b08530d7, type: 2}
+  - {fileID: 11400000, guid: 00b54c2267cd40e4398a5fc491072a65, type: 2}
+  - {fileID: 11400000, guid: d622b693584846b499c26fa442a3b619, type: 2}
