@@ -9,17 +9,8 @@ public class ShopManager : MonoBehaviour{
     private void Start() {
         paymentService = (PaymentService)ServiceLocator.GetService<PaymentService>();
     }
-    public void UseCreditCard() {
-        paymentService.SetPaymentMethod(new CreditCardPaymentStrategy(new FakeCreditCard()));
-    }
-    public void UsePaypal() {
-        paymentService.SetPaymentMethod(new PaypalPaymentStrategy(new FakePaypal()));
-    }
-    public void UseApplyPay() {
-        paymentService.SetPaymentMethod(new ApplePayPaymentStrategy(new FakeApplePay()));
-    }
 
     public void Buy() {
-        paymentService.TryPurchase(price);
+        paymentService.TryPurchase(new CreditCardPaymentStrategy(new FakeCreditCard()),price);
     }
 }
