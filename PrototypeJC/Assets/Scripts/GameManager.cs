@@ -13,15 +13,14 @@ public class GameManager : MonoBehaviour {
 
             RegisterSpawnService();
             RegisterEnemyService();
-            //RegisterSaveLoadService();
-            //RegisterStatsService();
-            //RegisterPlayerPositionService();
+            RegisterPaymentService();
 
         }
         else {
             Destroy(gameObject);
         }
     }
+
     private void RegisterSpawnService() {
         EnvironmentSpawner = new EnvironmentSpawner(new EnvironmentFactory());
         PathSpawner = new PathSpawner(new PathFactory());
@@ -33,5 +32,9 @@ public class GameManager : MonoBehaviour {
     }
     private void RegisterEnemyService() {
         ServiceLocator.RegisterService(new EnemyService());
+    }
+
+    private void RegisterPaymentService() {
+        ServiceLocator.RegisterService(new PaymentService());
     }
 }
